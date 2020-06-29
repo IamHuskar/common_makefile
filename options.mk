@@ -117,3 +117,30 @@
 #	g++ -o $(TARGET_BIN) $(CFLAGS) $(INTERNAL_OBJ) $(INCLUDE_DIRS) $(LINK_LIB_PATH) $(LINK_LIBS)
 #	strip $(TARGET_BIN)
 
+
+
+
+
+################################
+#
+#  build binary example
+#
+
+INCLUDE_DIRS+= -I../dep_lib/include -I../dep_lib/include/uwsc
+LINK_LIB_PATH+= -L../dep_lib/lib
+LINK_LIBS+= -l:libev.a -l:libcjson.a -lz 
+LINK_LIBS+=  -l:libmbedx509.a  -l:libuwsc.a  -l:libmbedcrypto.a -l:libmbedtls.a  
+
+DEBUG=1
+TARGET_BIN=arbitrage
+$(TARGET_BIN):$(INTERNAL_OBJ)
+	g++ -o $(TARGET_BIN) $(CFLAGS) $(INTERNAL_OBJ) $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
+	strip $(TARGET_BIN)
+
+#
+#
+#
+################################
+
+
+

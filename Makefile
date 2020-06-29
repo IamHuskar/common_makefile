@@ -7,7 +7,7 @@ LINK_LIB_PATH?=
 CFLAGS?=
  
  
--include option.mk
+-include options.mk
  
 dirs:=$(shell find . -maxdepth 1 -type d)
 dirs:=$(patsubst ./%,%,$(dirs))
@@ -15,7 +15,6 @@ dirs:=$(filter-out .%,$(dirs))
 dirs:=$(filter-out $(EXCLUDE_DIRS),$(dirs))
  
 SUBDIRS=$(dirs)
-SUBDIRS+= ../src/
  
 CFLAGS+= -O3 -Wall
  
@@ -53,9 +52,9 @@ endif
  
  
 %.o:%.c
-	$(AT)gcc $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) $(LINK_LIBS)
+	$(AT)gcc $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
 %.o:%.cpp
-	$(AT)g++ $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) $(LINK_LIBS)
+	$(AT)g++ $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
 $(SUBDIRS):
 	$(AT)for everydirectory in $(SUBDIRS);do \
 		make -C $$everydirectory;\

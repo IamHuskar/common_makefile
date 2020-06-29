@@ -133,6 +133,7 @@ LINK_LIBS+=  -l:libmbedx509.a  -l:libuwsc.a  -l:libmbedcrypto.a -l:libmbedtls.a
 
 DEBUG=1
 TARGET_BIN=arbitrage
+CLEAN_FILES+=$(TARGET_BIN)
 $(TARGET_BIN):$(INTERNAL_OBJ)
 	g++ -o $(TARGET_BIN) $(CFLAGS) $(INTERNAL_OBJ) $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
 	strip $(TARGET_BIN)

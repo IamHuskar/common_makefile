@@ -57,6 +57,8 @@ endif
 	$(AT)gcc $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
 %.o:%.cpp
 	$(AT)g++ $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
+%.o:%.cc
+	$(AT)g++ $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
 $(SUBDIRS):
 	$(AT)for everydirectory in $(SUBDIRS);do \
 		make -C $$everydirectory;\

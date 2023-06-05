@@ -27,13 +27,15 @@ endif
  
 CFILES=$(wildcard *.c)
 CPPFILES=$(wildcard *.cpp)
- 
+CPPFILES +=$(wildcard *.cc)
+
 CFILES:=$(filter-out $(EXCLUDE_SRCFILE),$(CFILES))
 CPPFILES:=$(filter-out $(EXCLUDE_SRCFILE),$(CPPFILES))
  
 COBJS  :=$(patsubst %.c,%.o,$(CFILES))
 CPPOBJS:=$(patsubst %.cpp,%.o,$(CPPFILES))
- 
+CPPOBJS+=$(patsubst %.cc,%.o,$(CPPFILES))
+
 ALLOBJS:=$(addsuffix /$(INTERNAL_OBJ),$(SUBDIRS))
 ALLOBJS:=$(ALLOBJS) $(COBJS) $(CPPOBJS)
  

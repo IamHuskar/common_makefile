@@ -27,21 +27,24 @@ endif
  
 CFILES=$(wildcard *.c)
 CPPFILES=$(wildcard *.cpp)
-CPPFILES +=$(wildcard *.cc)
+CCFILES=$(wildcard *.cc)
 
 CFILES:=$(filter-out $(EXCLUDE_SRCFILE),$(CFILES))
 CPPFILES:=$(filter-out $(EXCLUDE_SRCFILE),$(CPPFILES))
- 
+CCFILES:=$(filter-out $(EXCLUDE_SRCFILE),$(CCFILES))
+
 COBJS  :=$(patsubst %.c,%.o,$(CFILES))
 CPPOBJS:=$(patsubst %.cpp,%.o,$(CPPFILES))
-CPPOBJS+=$(patsubst %.cc,%.o,$(CPPFILES))
+CPPOBJS+=$(patsubst %.cc,%.o,$(CCFILES))
+#$(info $(CPPOBJS))
 
 ALLOBJS:=$(addsuffix /$(INTERNAL_OBJ),$(SUBDIRS))
 ALLOBJS:=$(ALLOBJS) $(COBJS) $(CPPOBJS)
- 
+
+
+
 CLEAN=clean distclean
 .PHONY:$(SUBDIRS) $(CLEAN) $(INTERNAL_OBJ)
- 
  
 ifeq ($(strip $(ALLOBJS)),)
 $(INTERNAL_OBJ):
@@ -51,7 +54,7 @@ $(INTERNAL_OBJ):$(COBJS) $(CPPOBJS) $(SUBDIRS)
 	$(AT)ld -r $(ALLOBJS) -o $@
 endif
  
- 
+
  
 %.o:%.c
 	$(AT)gcc $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
@@ -69,3 +72,4 @@ $(CLEAN):
 		make -C $$everydirectory $@;\
 	done
 	
+

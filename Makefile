@@ -5,8 +5,27 @@ INCLUDE_DIRS?=
 LINK_LIBS?=
 LINK_LIB_PATH?=
 CFLAGS?=
- 
- 
+COMPILE_PREFIX?=
+
+ifdef DEBUG
+AT=
+else
+AT=@
+endif
+
+
+ifdef USEGCC
+CC=$(COMPILE_PREFIX)gcc
+CXX=$(COMPILE_PREFIX)g++
+AR=$(COMPILE_PREFIX)ar
+LD=$(COMPILE_PREFIX)ld
+else
+CC=$(COMPILE_PREFIX)clang
+CXX=$(COMPILE_PREFIX)clang++
+AR=$(COMPILE_PREFIX)llvm-ar
+LD=$(COMPILE_PREFIX)lld
+endif
+
 -include options.mk
  
 dirs:=$(shell find . -maxdepth 1 -type d)
@@ -18,13 +37,10 @@ SUBDIRS=$(dirs)
  
 CFLAGS+= -O3 -Wall
  
-ifdef DEBUG
-AT=
-else
-AT=@
-endif
- 
- 
+
+$(info $(CC))
+$(info $(CXX))
+
 CFILES=$(wildcard *.c)
 CPPFILES=$(wildcard *.cpp)
 CCFILES=$(wildcard *.cc)
@@ -48,20 +64,20 @@ CLEAN=clean distclean
  
 ifeq ($(strip $(ALLOBJS)),)
 $(INTERNAL_OBJ):
-	$(AT)ar -rcs $@
+	$(AT)$(AR) -rcs $@
 else
 $(INTERNAL_OBJ):$(COBJS) $(CPPOBJS) $(SUBDIRS)
-	$(AT)ld -r $(ALLOBJS) -o $@
+	$(AT)$(LD) -r $(ALLOBJS) -o $@
 endif
  
 
  
 %.o:%.c
-	$(AT)gcc $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
+	$(AT)$(CC) $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
 %.o:%.cpp
-	$(AT)g++ $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
+	$(AT)$(CXX) $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
 %.o:%.cc
-	$(AT)g++ $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
+	$(AT)$(CXX) $(CFLAGS) -c -o $@ $< $(INCLUDE_DIRS) $(LINK_LIB_PATH) -Wl,--start-group $(LINK_LIBS) -Wl,--end-group
 $(SUBDIRS):
 	$(AT)for everydirectory in $(SUBDIRS);do \
 		make -C $$everydirectory;\

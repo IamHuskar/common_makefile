@@ -46,14 +46,17 @@ $(info $(CXX))
 CFILES=$(wildcard *.c)
 CPPFILES=$(wildcard *.cpp)
 CCFILES=$(wildcard *.cc)
+SFILES=$(wildcard *.S)
 
 CFILES:=$(filter-out $(EXCLUDE_SRCFILE),$(CFILES))
 CPPFILES:=$(filter-out $(EXCLUDE_SRCFILE),$(CPPFILES))
 CCFILES:=$(filter-out $(EXCLUDE_SRCFILE),$(CCFILES))
+SFILES=$(filter-out $(EXCLUDE_SRCFILE),$(SFILES))
 
 COBJS  :=$(patsubst %.c,%.o,$(CFILES))
 CPPOBJS:=$(patsubst %.cpp,%.o,$(CPPFILES))
 CPPOBJS+=$(patsubst %.cc,%.o,$(CCFILES))
+CPPOBJS+=$(patsubst %.S,%.o,$(SFILES))
 #$(info $(CPPOBJS))
 
 ALLOBJS:=$(addsuffix /$(INTERNAL_OBJ),$(SUBDIRS))
